@@ -14,41 +14,73 @@ let favouriteMedia = [
 ];
 
 
-
 function exampleHello(){
 	console.log("hello world"); 
 }
 
 function createListOfMedia(){
 
-    let rootUlNode = document.querySelector("ul");
-    // let exampleNode = document.getElementsByClassName("bananas")[0];
+	let rootUlNode = document.querySelector("ul");
+
+	rootUlNode.innerHTML = ""; // stops adding items to list duplicating the list
+	// let exampleNode = document.getElementsByClassName("bananas")[0];
 	// let exampleNode = document.getElementById("mediaList");
 
 	favouriteMedia.forEach(mediaItem => {
 		// Create an element but do not display it yet 
-        let newListItem = document.createElement("li");
+		let newListItem = document.createElement("li");
 
 		// Assign some data to the element
-        newListItem.textContent = mediaItem;
-        newListItem.id = mediaItem;
+		newListItem.textContent = mediaItem;
+		newListItem.id = mediaItem;
 
 		// Creating a button that will remove this item later
-        let removeItemButton = document.createElement("button");
-        removeItemButton.onclick = (() => removeItemFromList(mediaItem));
-        removeItemButton.textContent = "Remove Item";
-   
+		let removeItemButton = document.createElement("button");
+
+		removeItemButton.onclick = (() => removeItemFromList(mediaItem));
+
+		removeItemButton.textContent = "Remove item";
+
 		// Add the button to the list item 
-        newListItem.appendChild(removeItemButton);
+		newListItem.appendChild(removeItemButton);
+
 
 		// Add the element to the visible page
-        rootUlNode.appendChild(newListItem);
+		rootUlNode.appendChild(newListItem);
+
+
 	});
 }
 
 function removeItemFromList(targetItem){
-    let targetItemNode = document.getElementById(targetItem);
-    if (targetItemNode){
-        targetItemNode.parentNode.removeChild(targetItemNode);
-    }
+	let targetItemNode = document.getElementById(targetItem);
+	if (targetItemNode){
+		// targetItemNode.parentNode.removeChild(targetItemNode);
+
+		// Modift the array
+		favouriteMedia = favouriteMedia.filter(item => item !== targetItem);
+		// regenrate the visuals
+		createListOfMedia();
+	}
 }
+
+
+function addItemToList(event){
+	event.preventDefault();
+	console.log("we tried to add an item to the list!");
+
+	let realInputField = document.getElementById("real-nameinput");
+	let newItemName = realInputField.value;
+	console.log("newItemName is: " + newItemName);
+	// add item to list
+	favouriteMedia.push(newItemName);
+
+	// generate a new list 
+	createListOfMedia();
+
+}
+
+let realFormSubmitButton = document.getElementById("real-formsubmit");
+realFormSubmitButton.addEventListener("click", addItemToList);
+// functionName() runs immediately, do not want!!
+// realFormSubmitButton.addEventListener("click", addItemToList());
